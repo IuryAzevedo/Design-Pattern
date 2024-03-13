@@ -4,15 +4,16 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../store/reducers/userReducer'; 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
 const CreateUserComponent: React.FC = () => {
   const dispatch = useDispatch();
   const [nome, setNome] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
   const handleSubmit = async () => {
+    if (nome === "" || email === "" || password === "") {
+      toast.warning("Preencha todos os campos");
+      return;
+    }
     try {
       await dispatch(addUser({ nome, email, password }));
       toast.success('Usuário criado com sucesso!');
@@ -24,9 +25,8 @@ const CreateUserComponent: React.FC = () => {
       console.error('Error creating user:', error);
     }
   };
-  
   return (
-    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: 5, paddingBottom: 5}}>
+    <div style={{flexDirection: 'column', display: 'flex',}}>
     <h1>Criar usuário</h1>
       <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Nome" />
       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
